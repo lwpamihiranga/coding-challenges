@@ -22,38 +22,57 @@ public class Ccwc {
         String fileName = file.getName();
 
         if (commandLineFlag.equals("-c")) {
-            long fileSize = file.length();
+            long fileSize = getByteCount(file);
             System.out.println(fileSize + " " + fileName);
         } else if (commandLineFlag.equals("-l")) {
-            LineNumberReader reader = new LineNumberReader(new FileReader(file));
-            while (reader.readLine() != null) {
-            }
-            int lineCount = reader.getLineNumber();
+            int lineCount = getLineCount(file);
             System.out.println(lineCount + " " + fileName);
-            reader.close();
         } else if (commandLineFlag.equals("-w")) {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            int wordCount = 0;
-            String content;
-            while ((content = reader.readLine()) != null) {
-                content = content.trim();
-                if (content.isBlank()) {
-                    continue;
-                }
-                String[] words = content.split("\\s+");
-                wordCount += words.length;
-            }
+            int wordCount = getWordCount(file);
             System.out.println(wordCount + " " + fileName);
-            reader.close();
         } else if (commandLineFlag.equals("-m")) {
-            InputStream inputStream = Files.newInputStream(file.toPath());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            long charCount = 0;
-            while ((reader.read()) != -1) {
-                charCount++;
-            }
+            long charCount = getCharCount(file);
             System.out.println(charCount + " " + fileName);
-            reader.close();
         }
+    }
+
+    private static long getByteCount(File file) {
+        return file.length();
+    }
+
+    private static int getLineCount(File file) throws IOException {
+        LineNumberReader reader = new LineNumberReader(new FileReader(file));
+        while (reader.readLine() != null) {
+        }
+        int lineCount = reader.getLineNumber();
+        reader.close();
+        return lineCount;
+    }
+
+    private static int getWordCount(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        int wordCount = 0;
+        String content;
+        while ((content = reader.readLine()) != null) {
+            content = content.trim();
+            if (content.isBlank()) {
+                continue;
+            }
+            String[] words = content.split("\\s+");
+            wordCount += words.length;
+        }
+        reader.close();
+        return wordCount;
+    }
+
+    private static long getCharCount(File file) throws IOException {
+        InputStream inputStream = Files.newInputStream(file.toPath());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        long charCount = 0;
+        while ((reader.read()) != -1) {
+            charCount++;
+        }
+        reader.close();
+        return charCount;
     }
 }
