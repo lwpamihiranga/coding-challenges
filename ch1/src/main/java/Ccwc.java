@@ -22,8 +22,8 @@ public class Ccwc {
         String fileName = file.getName();
 
         if (commandLineFlag.equals("-c")) {
-            long fineSize = file.length();
-            System.out.println(fineSize + " " + fileName);
+            long fileSize = file.length();
+            System.out.println(fileSize + " " + fileName);
         } else if (commandLineFlag.equals("-l")) {
             LineNumberReader reader = new LineNumberReader(new FileReader(file));
             while (reader.readLine() != null) {
