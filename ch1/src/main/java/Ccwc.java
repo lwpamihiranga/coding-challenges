@@ -11,8 +11,15 @@ public class Ccwc {
     public static void main(String[] args) throws IOException {
         System.out.println("Staring ccwc...");
 
-        String commandLineFlag = args[0];
-        String filePath = args[1];
+        String commandLineFlag = "";
+        String filePath = "";
+
+        if (args.length > 1) {
+            commandLineFlag = args[0];
+            filePath = args[1];
+        } else if (args.length == 1) {
+            filePath = args[0];
+        }
 
         System.out.println("Command line flag: " + commandLineFlag);
         System.out.println("File path: " + filePath);
@@ -33,6 +40,11 @@ public class Ccwc {
         } else if (commandLineFlag.equals("-m")) {
             long charCount = getCharCount(file);
             System.out.println(charCount + " " + fileName);
+        } else {
+            int lineCount = getLineCount(file);
+            int wordCount = getWordCount(file);
+            long charCount = getCharCount(file);
+            System.out.println(lineCount + " " + wordCount + " " + charCount + " " + fileName);
         }
     }
 
