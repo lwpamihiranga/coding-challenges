@@ -1,3 +1,4 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,6 +27,20 @@ public class Ccwc {
             }
             int lineCount = reader.getLineNumber();
             System.out.println(lineCount + " " + fileName);
+            reader.close();
+        } else if (commandLineFlag.equals("-w")) {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            int wordCount = 0;
+            String content;
+            while ((content = reader.readLine()) != null) {
+                content = content.trim();
+                if (content.isBlank()) {
+                    continue;
+                }
+                String[] words = content.split("\\s+");
+                wordCount += words.length;
+            }
+            System.out.println(wordCount + " " + fileName);
             reader.close();
         }
     }
