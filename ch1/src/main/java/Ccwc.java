@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.nio.file.Files;
 
 public class Ccwc {
     public static void main(String[] args) throws IOException {
@@ -41,6 +44,15 @@ public class Ccwc {
                 wordCount += words.length;
             }
             System.out.println(wordCount + " " + fileName);
+            reader.close();
+        } else if (commandLineFlag.equals("-m")) {
+            InputStream inputStream = Files.newInputStream(file.toPath());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            long charCount = 0;
+            while ((reader.read()) != -1) {
+                charCount++;
+            }
+            System.out.println(charCount + " " + fileName);
             reader.close();
         }
     }
