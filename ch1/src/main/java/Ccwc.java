@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class Ccwc {
@@ -13,12 +14,32 @@ public class Ccwc {
 
         String commandLineFlag = "";
         String filePath = "";
+        boolean isPiped = false;
+        BufferedReader reader = null;
 
         if (args.length > 1) {
             commandLineFlag = args[0];
             filePath = args[1];
         } else if (args.length == 1) {
-            filePath = args[0];
+            if (args[0].equals("-c")) {
+                commandLineFlag = args[0];
+                isPiped = true;
+                reader = new BufferedReader(new InputStreamReader(System.in));
+            } else if (args[0].equals("-l")) {
+                commandLineFlag = args[0];
+                isPiped = true;
+                reader = new BufferedReader(new InputStreamReader(System.in));
+            } else if (args[0].equals("-w")) {
+                commandLineFlag = args[0];
+                isPiped = true;
+                reader = new BufferedReader(new InputStreamReader(System.in));
+            } else if (args[0].equals("-m")) {
+                commandLineFlag = args[0];
+                isPiped = true;
+                reader = new BufferedReader(new InputStreamReader(System.in));
+            } else {
+                filePath = args[0];
+            }
         }
 
         System.out.println("Command line flag: " + commandLineFlag);
@@ -27,9 +48,13 @@ public class Ccwc {
         File file = new File(filePath);
 
         String fileName = file.getName();
-
         if (commandLineFlag.equals("-c")) {
-            long fileSize = getByteCount(file);
+            long fileSize;
+            if (isPiped) {
+                fileSize = getByteCount(reader);
+            } else {
+                fileSize = getByteCount(file);
+            }
             System.out.println(fileSize + " " + fileName);
         } else if (commandLineFlag.equals("-l")) {
             int lineCount = getLineCount(file);
@@ -41,8 +66,7 @@ public class Ccwc {
             long charCount = getCharCount(file);
             System.out.println(charCount + " " + fileName);
         } else {
-            int lineCount = getLineCount(file);
-            int wordCount = getWordCount(file);
+            int lineCount = getLineCount(file); int wordCount = getWordCount(file);
             long charCount = getCharCount(file);
             System.out.println(lineCount + " " + wordCount + " " + charCount + " " + fileName);
         }
@@ -50,6 +74,17 @@ public class Ccwc {
 
     private static long getByteCount(File file) {
         return file.length();
+    }
+
+    private static long getByteCount(BufferedReader reader) throws IOException {
+        long count = 0;
+        char[] buffer = new char[8192];
+        int charsRead;
+        while ((charsRead = reader.read(buffer)) != -1) {
+            String chunk = new String(buffer, 0,charsRead);
+            count += chunk.getBytes(StandardCharsets.UTF_8).length;
+        }
+        return count;
     }
 
     private static int getLineCount(File file) throws IOException {
