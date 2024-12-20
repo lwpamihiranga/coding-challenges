@@ -73,7 +73,12 @@ public class Ccwc {
             }
             System.out.println(wordCount + " " + fileName);
         } else if (commandLineFlag.equals("-m")) {
-            long charCount = getCharCount(file);
+            long charCount;
+            if (isPiped) {
+                charCount = getCharCount(reader);
+            } else {
+                charCount = getCharCount(file);
+            }
             System.out.println(charCount + " " + fileName);
         } else {
             int lineCount = getLineCount(file); int wordCount = getWordCount(file);
@@ -149,6 +154,15 @@ public class Ccwc {
     private static long getCharCount(File file) throws IOException {
         InputStream inputStream = Files.newInputStream(file.toPath());
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        long charCount = 0;
+        while ((reader.read()) != -1) {
+            charCount++;
+        }
+        reader.close();
+        return charCount;
+    }
+
+    private static long getCharCount(BufferedReader reader) throws IOException {
         long charCount = 0;
         while ((reader.read()) != -1) {
             charCount++;
