@@ -57,7 +57,12 @@ public class Ccwc {
             }
             System.out.println(fileSize + " " + fileName);
         } else if (commandLineFlag.equals("-l")) {
-            int lineCount = getLineCount(file);
+            int lineCount;
+            if (isPiped) {
+                lineCount = getLineCount(new InputStreamReader(System.in));
+            } else {
+                lineCount = getLineCount(file);
+            }
             System.out.println(lineCount + " " + fileName);
         } else if (commandLineFlag.equals("-w")) {
             int wordCount = getWordCount(file);
@@ -89,6 +94,15 @@ public class Ccwc {
 
     private static int getLineCount(File file) throws IOException {
         LineNumberReader reader = new LineNumberReader(new FileReader(file));
+        while (reader.readLine() != null) {
+        }
+        int lineCount = reader.getLineNumber();
+        reader.close();
+        return lineCount;
+    }
+
+    private static int getLineCount(InputStreamReader inputStreamReader) throws IOException {
+        LineNumberReader reader = new LineNumberReader(inputStreamReader);
         while (reader.readLine() != null) {
         }
         int lineCount = reader.getLineNumber();
