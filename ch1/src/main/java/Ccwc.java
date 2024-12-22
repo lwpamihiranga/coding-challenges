@@ -17,6 +17,12 @@ public class Ccwc {
         boolean isPiped = false;
         BufferedReader reader = null;
 
+        if (System.console() != null) {
+            isPiped = false;
+        } else {
+            reader = new BufferedReader(new InputStreamReader(System.in));
+            isPiped = true;
+        }
         if (args.length > 1) {
             commandLineFlag = args[0];
             filePath = args[1];
@@ -81,8 +87,19 @@ public class Ccwc {
             }
             System.out.println(charCount + " " + fileName);
         } else {
-            int lineCount = getLineCount(file); int wordCount = getWordCount(file);
-            long charCount = getCharCount(file);
+            int lineCount;
+            int wordCount;
+            long charCount;
+            if (isPiped) {
+                long[] result = getAllResult(reader);
+                lineCount = (int) result[0];
+                wordCount = (int) result[1];
+                charCount = result[2];
+            } else {
+                lineCount = getLineCount(file);
+                wordCount = getWordCount(file);
+                charCount = getCharCount(file);
+            }
             System.out.println(lineCount + " " + wordCount + " " + charCount + " " + fileName);
         }
     }
@@ -96,7 +113,7 @@ public class Ccwc {
         char[] buffer = new char[8192];
         int charsRead;
         while ((charsRead = reader.read(buffer)) != -1) {
-            String chunk = new String(buffer, 0,charsRead);
+            String chunk = new String(buffer, 0, charsRead);
             count += chunk.getBytes(StandardCharsets.UTF_8).length;
         }
         return count;
@@ -169,5 +186,10 @@ public class Ccwc {
         }
         reader.close();
         return charCount;
+    }
+
+    private static long[] getAllResult(BufferedReader reader) {
+        long[] counts = {0, 0, 0};
+        return counts;
     }
 }
